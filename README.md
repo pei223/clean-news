@@ -1,9 +1,14 @@
-## setup
-```
-poetry install
-```
+# フィルタリングが強いニュースサイト
+LLMで遊ぶネタとして、トピックなどを推論してもらってそれ使ってフィルタリングするサイトを作る予定。
 
-TODO
-- トピックに必要な文字数を計測して、削れるように修正
-- firestore連携
-- バッチ処理の考え方
+## ツール
+- firebase CLI
+- gcloud CLI
+- sops
+
+## firebase setup
+
+```
+firebase login
+gcloud init
+```

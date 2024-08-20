@@ -3,6 +3,8 @@ LLMでトピックとか推論してDBに保存するバッチ処理。
 
 ## setup
 ```
+sops -d src/clean-news-dev-firebase-adminsdk.enc.json > src/clean-news-dev-firebase-adminsdk.json 
+
 poetry install
 # .env.sampleから.envを作成して編集
 source .env
