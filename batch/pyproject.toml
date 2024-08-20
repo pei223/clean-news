@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "news-poc"
+version = "0.1.0"
+description = ""
+authors = ["pei223 <peidparc@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langchain = "^0.2.9"
+langchain-openai = "^0.1.17"
+bs4 = "^0.0.2"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+black = "^24.8.0"
+mypy = "^1.11.1"
+pyproject-flake8 = "^7.0.0"
+types-requests = "^2.32.0.20240712"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+target-version = ['py312']
+
+[tool.isort]
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+known_local_folder = ['config']
+
+[tool.flake8]
+max-line-length = 88
+max-complexity = 18
+ignore = "E203,E266,W503,W504,E501"
+exclude = ["__pychache", "*/snapshots/snap_test_*"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+check_untyped_defs = true
