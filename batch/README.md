@@ -13,8 +13,12 @@ source .env
 poetry run python3 src/run_scrape_and_predict.py
 ```
 
-## やることメモ
-TODO
-- トピックに必要な文字数を計測して、削れるように修正
-- firestore連携
-- バッチ処理の考え方
+## バッチ処理実行
+```
+poetry run python3 src/main.py
+```
+
+## データ全削除
+```
+poetry run python3 src/cleandata.py
+```
