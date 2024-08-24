@@ -12,3 +12,9 @@ LLMで遊ぶネタとして、トピックなどを推論してもらってそ�
 firebase login
 gcloud init
 ```
+
+## セキュリティルール適用
+
+```
+firebase deploy --only firestore:rules
+```
