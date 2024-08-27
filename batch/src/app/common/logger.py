@@ -1,5 +1,6 @@
 import logging
 from functools import wraps
+import sys
 from typing import Callable
 
 import structlog
@@ -7,6 +8,8 @@ from structlog.contextvars import bound_contextvars
 
 
 def init_logger(log_level: str):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
     structlog.configure(
         processors=[
             structlog.contextvars.merge_contextvars,
@@ -19,7 +22,7 @@ def init_logger(log_level: str):
                     structlog.processors.CallsiteParameter.LINENO,
                 ],
             ),
-            structlog.processors.JSONRenderer(),
+            structlog.processors.JSONRenderer(ensure_ascii=False),
         ],
         wrapper_class=structlog.make_filtering_bound_logger(
             # TODO: deprecated修正
