@@ -36,7 +36,7 @@ for i, article_summary in enumerate(article_summaries):
         careful_labels=article_with_feature.careful_labels,
     )
     logger.info("save article", idx=i, max_len=len(article_summaries))
-    repo.save(article_with_feature)
+    repo.save(article_with_feature, "20240827-1")
     time.sleep(0.5)
 logger.info("save finished", limit_min_date=limit_min_date)
 

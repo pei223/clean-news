@@ -31,11 +31,13 @@ class FirestoreArticleRepo(IArticleRepo):
         ]  # firestoreに保存する都合上あまり長い文字列を入れたくないので
         return ret_dict
 
-    def save(self, article: ArticleWithFeature):
+    def save(self, article: ArticleWithFeature, version: str):
         article_ref = self._db.collection(self._collection_name).document(
             article.article_id
         )
-        article_ref.set(self._transfer_article_for_firestore(article))
+        article_ref.set(
+            self._transfer_article_for_firestore(article) | {"version": version}
+        )
 
     def delete_old_by_created_at(self, created_at: datetime):
         batch = self._db.batch()

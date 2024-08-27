@@ -6,7 +6,7 @@ from app.domain.articles import ArticleWithFeature
 
 class IArticleRepo(ABC):
     @abstractmethod
-    def save(self, article: ArticleWithFeature):
+    def save(self, article: ArticleWithFeature, label: str):
         pass
 
     @abstractmethod
