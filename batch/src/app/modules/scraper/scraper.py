@@ -24,8 +24,8 @@ class ArticleSummary:
     url: str
     created_at: datetime
 
-    def to_article(self, body: str) -> Article:
-        return Article.new(**asdict(self), body=body)
+    def to_article(self, body: str, keywords: list[str]) -> Article:
+        return Article.new(**asdict(self), body=body, keywords=keywords)
 
 
 class LivedoorNewsScraper:
@@ -98,10 +98,14 @@ class LivedoorNewsScraper:
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         body_elm = soup.select_one(".articleBody")
+        keywords_elm = soup.select_one(".articleHeadKeyword")
         body = ""
         for body_row in body_elm.select("p"):
             body += body_row.get_text(strip=True)
-        return article_summary.to_article(body)
+        keywords = []
+        for keyword_elm in keywords_elm.select("a"):
+            keywords.append(keyword_elm.get_text(strip=True))
+        return article_summary.to_article(body, keywords)
 
     @retry(
         stop=stop_after_attempt(5), wait=wait_random_exponential(multiplier=1, max=60)

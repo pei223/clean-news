@@ -26,8 +26,8 @@ class FirestoreArticleRepo(IArticleRepo):
 
     def _transfer_article_for_firestore(self, article: ArticleWithFeature) -> dict:
         ret_dict = asdict(article)
-        ret_dict["body"] = ret_dict["body"][
-            :100
+        del ret_dict[
+            "body"
         ]  # firestoreに保存する都合上あまり長い文字列を入れたくないので
         return ret_dict
 

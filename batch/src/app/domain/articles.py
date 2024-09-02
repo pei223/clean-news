@@ -11,6 +11,7 @@ class Article:
     body: str
     thumbnail_url: str
     url: str
+    keywords: list[str]
     created_at: datetime
 
     @staticmethod
@@ -20,6 +21,7 @@ class Article:
         body: str,
         thumbnail_url: str,
         url: str,
+        keywords: list[str],
         created_at: datetime,
     ) -> "Article":
         # NOTE:
@@ -32,8 +34,12 @@ class Article:
             body=body,
             thumbnail_url=thumbnail_url,
             url=url,
+            keywords=keywords,
             created_at=created_at,
         )
+
+    def is_advertisement(self) -> bool:
+        return "PR企画" in self.keywords or "クーポン" in self.keywords
 
 
 @dataclass
