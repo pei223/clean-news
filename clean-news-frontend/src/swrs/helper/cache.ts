@@ -34,14 +34,16 @@ export type CacheRecord<T> = {
   item: T;
 };
 
-export function parseConsideringDate(k: unknown, v: unknown): unknown {
+export function parseConsideringDate(_: unknown, v: unknown): unknown {
   if (typeof v === "string" && timestampExp.test(v)) {
     return new Date(v);
   }
   return v;
 }
 
-export function stringifyConsideringDate(k: unknown, v: any): unknown {
+// JSON.stringifyで使われる想定で、そちらのIFがanyなので
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function stringifyConsideringDate(_: unknown, v: any): unknown {
   if (v != null && typeof v.toISOString === "function") {
     return v.toISOString();
   }
