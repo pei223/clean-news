@@ -27,7 +27,6 @@ export function filterAndSortArticles(
   sortKind: SortKinds,
   blockedArticleVisibility: BlockedArticleVisibility
 ): Article[] {
-  console.log(articles);
   let v = articles;
   if (blockedArticleVisibility === "remove") {
     v = v.filter(
@@ -45,6 +44,4 @@ export function filterAndSortArticles(
       break;
   }
   return v.filter((r) => r.version === "20240827-6");
-  // return v;
 }
-// $1.07~
