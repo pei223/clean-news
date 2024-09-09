@@ -1,4 +1,3 @@
-import { Timestamp } from "firebase/firestore";
 import { intersection } from "lodash";
 
 export const validSortKinds = ["created-at-desc", "created-at-asc"] as const;
@@ -15,9 +14,10 @@ export type Article = {
   body: string;
   url: string;
   thumbnailUrl: string | null;
-  createdAt: Timestamp;
+  createdAt: Date;
   topics: string[];
   carefulLabels: string[];
+  version?: string;
 };
 
 export function filterAndSortArticles(
@@ -27,6 +27,7 @@ export function filterAndSortArticles(
   sortKind: SortKinds,
   blockedArticleVisibility: BlockedArticleVisibility
 ): Article[] {
+  console.log(articles);
   let v = articles;
   if (blockedArticleVisibility === "remove") {
     v = v.filter(
@@ -37,11 +38,13 @@ export function filterAndSortArticles(
   }
   switch (sortKind) {
     case "created-at-desc":
-      v.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
+      v.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
       break;
     case "created-at-asc":
-      v.sort((a, b) => a.createdAt.toMillis() - b.createdAt.toMillis());
+      v.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
       break;
   }
-  return v;
+  return v.filter((r) => r.version === "20240827-6");
+  // return v;
 }
+// $1.07~

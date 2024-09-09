@@ -13,15 +13,17 @@ export type ArticleFirestoreRes = {
   created_at: Timestamp;
   topics: string[];
   careful_labels: string[];
+  version?: string;
 };
 
 const COLLECTION_NAME = "news-articles";
+
 export class ArticleRepo {
   private collectionRef(): firebase.firestore.CollectionReference {
     return db.collection(COLLECTION_NAME);
   }
 
-  async fetchArticles(): Promise<any> {
+  async fetchArticles(): Promise<Article[]> {
     const v = await this.collectionRef().get();
     return v.docs.map((v) => {
       const _v = v.data() as ArticleFirestoreRes;
@@ -32,9 +34,10 @@ export class ArticleRepo {
         body: _v.body,
         url: _v.url,
         thumbnailUrl: _v.thumbnail_url,
-        createdAt: _v.created_at,
+        createdAt: _v.created_at.toDate(),
         topics: _v.topics,
         carefulLabels: _v.careful_labels,
+        version: _v.version,
       } as Article;
     });
   }
