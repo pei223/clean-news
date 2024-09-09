@@ -19,7 +19,9 @@ scraper = LivedoorNewsScraper()
 predictor = Predictor(config.open_api_key, config.article_max_char_len_for_predict)
 repo = FirestoreArticleRepo(config.firebase_admin_sdk_credential_file_path)
 
-limit_min_date = datetime.now(timezone.utc) - timedelta(days=1)
+# 推論時間も含めて30分古いものを含める
+# 同じ記事を推論しても問題ない
+limit_min_date = datetime.now(timezone.utc) - timedelta(hours=6, minutes=30)
 
 logger.info("get summaries", limit_min_date=limit_min_date)
 article_summaries = scraper.get_article_summaries(limit_min_date)
