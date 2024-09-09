@@ -9,7 +9,7 @@ export function localStorageProvider(): Cache {
       if (typeof v === "string" && timestampExp.test(v)) {
         return new Date(v);
       }
-      return k;
+      return v;
     })
   );
 
@@ -27,4 +27,23 @@ export function localStorageProvider(): Cache {
 
   // パフォーマンスのために、書き込みと読み取りには引き続き Map を使用します。
   return map as Cache;
+}
+
+export type CacheRecord<T> = {
+  expiredAt: number;
+  item: T;
+};
+
+export function parseConsideringDate(k: unknown, v: unknown): unknown {
+  if (typeof v === "string" && timestampExp.test(v)) {
+    return new Date(v);
+  }
+  return v;
+}
+
+export function stringifyConsideringDate(k: unknown, v: any): unknown {
+  if (v != null && typeof v.toISOString === "function") {
+    return v.toISOString();
+  }
+  return v;
 }
