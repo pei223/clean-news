@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ArticleRepo } from "../repos/articleRepo";
 import Layout from "../components/layout";
 import {
   Article,
@@ -10,15 +9,19 @@ import {
 import { ArticleRow } from "../components/articles/ArticleRow";
 import { Divider } from "@mui/material";
 import { FilterForm } from "../components/articles/FilterForm";
+import { useArticles } from "../swrs/article";
+import LoadingScreen from "../components/common/LoadingScreen";
 
 export const IndexPage = () => {
-  const [blockedArticleVisibility, setBlockedArticleVisibility] =
+  const { data: sourceArticles, loading } = useArticles();
+
+  const [blockedArticleVisibility, _setBlockedArticleVisibility] =
     useState<BlockedArticleVisibility>("remove");
-  const [filterTopics, setFilterTopics] = useState<string[]>([
+  const [filterTopics, _setFilterTopics] = useState<string[]>([
     "芸能",
     "トレンド",
   ]);
-  const [filterCarefulLabels, setCarefulLabels] = useState<string[]>([
+  const [filterCarefulLabels, _setCarefulLabels] = useState<string[]>([
     "死去",
     "暴力",
     "不祥事",
@@ -27,32 +30,45 @@ export const IndexPage = () => {
   const [sortKind, setSortKind] = useState<SortKinds>("created-at-desc");
 
   useEffect(() => {
-    new ArticleRepo().fetchArticles().then((result: Article[]) => {
-      setArticles(
-        filterAndSortArticles(
-          result,
-          filterTopics,
-          filterCarefulLabels,
-          sortKind,
-          blockedArticleVisibility
-        )
-      );
-    });
-  }, [sortKind, filterTopics, filterCarefulLabels]);
+    if (sourceArticles == null) {
+      return;
+    }
+    setArticles(
+      filterAndSortArticles(
+        sourceArticles,
+        filterTopics,
+        filterCarefulLabels,
+        sortKind,
+        blockedArticleVisibility
+      )
+    );
+  }, [
+    sourceArticles,
+    sortKind,
+    filterTopics,
+    filterCarefulLabels,
+    blockedArticleVisibility,
+  ]);
 
   return (
     <Layout>
-      <FilterForm sortKind={sortKind} onSortKindChange={setSortKind} />
-      {articles.map((v) => (
-        <div key={v.articleId}>
-          <ArticleRow
-            filterTopics={filterTopics}
-            filterCarefulLabels={filterCarefulLabels}
-            article={v}
-          />
-          <Divider />
-        </div>
-      ))}
+      {loading ? (
+        <LoadingScreen />
+      ) : (
+        <>
+          <FilterForm sortKind={sortKind} onSortKindChange={setSortKind} />
+          {articles.map((v) => (
+            <div key={v.articleId}>
+              <ArticleRow
+                filterTopics={filterTopics}
+                filterCarefulLabels={filterCarefulLabels}
+                article={v}
+              />
+              <Divider />
+            </div>
+          ))}
+        </>
+      )}
     </Layout>
   );
 };

@@ -5,6 +5,7 @@ import { IndexPage } from "./pages";
 import { SnackbarProvider } from "notistack";
 import { ErrorBoundary } from "react-error-boundary";
 import AppErrorFallback from "./AppErrorFallback";
+import { SWRConfig } from "swr";
 
 const theme = createTheme({
   spacing: 8,
@@ -28,15 +29,17 @@ const router = createBrowserRouter([
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        maxSnack={5}
-        anchorOrigin={{ horizontal: "center", vertical: "top" }}
-        autoHideDuration={3000}
-      >
-        <ErrorBoundary FallbackComponent={AppErrorFallback}>
-          <RouterProvider router={router} />
-        </ErrorBoundary>
-      </SnackbarProvider>
+      <SWRConfig>
+        <SnackbarProvider
+          maxSnack={5}
+          anchorOrigin={{ horizontal: "center", vertical: "top" }}
+          autoHideDuration={3000}
+        >
+          <ErrorBoundary FallbackComponent={AppErrorFallback}>
+            <RouterProvider router={router} />
+          </ErrorBoundary>
+        </SnackbarProvider>
+      </SWRConfig>
     </ThemeProvider>
   );
 }
