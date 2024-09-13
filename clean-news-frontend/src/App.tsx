@@ -6,6 +6,7 @@ import { SnackbarProvider } from "notistack";
 import { ErrorBoundary } from "react-error-boundary";
 import AppErrorFallback from "./AppErrorFallback";
 import { SWRConfig } from "swr";
+import { createContext, useState } from "react";
 
 const theme = createTheme({
   spacing: 8,
@@ -26,7 +27,19 @@ const router = createBrowserRouter([
   },
 ]);
 
+interface AppContextType {
+  developperMode: boolean;
+  setDevelopperMode: (v: boolean) => void;
+}
+
+export const AppContext = createContext<AppContextType>({
+  developperMode: false,
+  setDevelopperMode: () => {},
+});
+
 function App() {
+  const [developperMode, setDevelopperMode] = useState(false);
+
   return (
     <ThemeProvider theme={theme}>
       <SWRConfig>
@@ -35,9 +48,16 @@ function App() {
           anchorOrigin={{ horizontal: "center", vertical: "top" }}
           autoHideDuration={3000}
         >
-          <ErrorBoundary FallbackComponent={AppErrorFallback}>
-            <RouterProvider router={router} />
-          </ErrorBoundary>
+          <AppContext.Provider
+            value={{
+              developperMode,
+              setDevelopperMode,
+            }}
+          >
+            <ErrorBoundary FallbackComponent={AppErrorFallback}>
+              <RouterProvider router={router} />
+            </ErrorBoundary>
+          </AppContext.Provider>
         </SnackbarProvider>
       </SWRConfig>
     </ThemeProvider>
