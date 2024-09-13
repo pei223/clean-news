@@ -1,73 +1,99 @@
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Layout from "../components/layout";
 import {
-  Article,
-  BlockedArticleVisibility,
-  SortKinds,
+  ArticleWithDisplayDisable,
+  FilterAndSortCriteria,
   filterAndSortArticles,
 } from "../domain/article";
 import { ArticleRow } from "../components/articles/ArticleRow";
-import { Divider } from "@mui/material";
+import { Box, Divider, Pagination } from "@mui/material";
 import { FilterForm } from "../components/articles/FilterForm";
 import { useArticles } from "../swrs/article";
 import LoadingScreen from "../components/common/LoadingScreen";
+import { useSearchParams } from "react-router-dom";
+import { calcMaxPages } from "../utils/viewUtil";
+import { usePaginatedData } from "../utils/customHooks";
+import { AppContext } from "../App";
 
 export const IndexPage = () => {
+  const { developperMode } = useContext(AppContext);
   const { data: sourceArticles, loading } = useArticles();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const countPerPage = Number(searchParams.get("countPerPage")) || 10;
 
-  const [blockedArticleVisibility, _setBlockedArticleVisibility] =
-    useState<BlockedArticleVisibility>("remove");
-  const [filterTopics, _setFilterTopics] = useState<string[]>([
-    "芸能",
-    "トレンド",
-  ]);
-  const [filterCarefulLabels, _setCarefulLabels] = useState<string[]>([
-    "死去",
-    "暴力",
-    "不祥事",
-  ]);
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [sortKind, setSortKind] = useState<SortKinds>("created-at-desc");
+  const [criteria, setCriteria] = useState<FilterAndSortCriteria>({
+    blockedArticleVisibility: "remove",
+    filterTopics: ["芸能", "トレンド"],
+    filterCarefulLabels: ["死去", "暴力", "不祥事"],
+    sortKind: "created-at-desc",
+  });
+
+  const [articles, setArticles] = useState<ArticleWithDisplayDisable[]>([]);
+
+  const paginatedData = usePaginatedData(articles, page, countPerPage);
 
   useEffect(() => {
     if (sourceArticles == null) {
       return;
     }
-    setArticles(
-      filterAndSortArticles(
-        sourceArticles,
-        filterTopics,
-        filterCarefulLabels,
-        sortKind,
-        blockedArticleVisibility
-      )
-    );
-  }, [
-    sourceArticles,
-    sortKind,
-    filterTopics,
-    filterCarefulLabels,
-    blockedArticleVisibility,
-  ]);
+    const filteredArticles = filterAndSortArticles(sourceArticles, criteria);
+    setArticles(filteredArticles);
+  }, [sourceArticles, criteria, page, countPerPage]);
+
+  const setPage = useCallback(
+    (newPage: number) => {
+      searchParams.set("page", newPage.toString());
+      setSearchParams(searchParams);
+    },
+    [searchParams, setSearchParams]
+  );
 
   return (
     <Layout>
       {loading ? (
         <LoadingScreen />
       ) : (
-        <>
-          <FilterForm sortKind={sortKind} onSortKindChange={setSortKind} />
-          {articles.map((v) => (
-            <div key={v.articleId}>
-              <ArticleRow
-                filterTopics={filterTopics}
-                filterCarefulLabels={filterCarefulLabels}
-                article={v}
-              />
-              <Divider />
-            </div>
-          ))}
-        </>
+        <Box
+          sx={{
+            marginTop: 2,
+            marginBottom: "160px",
+          }}
+        >
+          <FilterForm
+            criteria={criteria}
+            onCriteriaChange={(v) => setCriteria(v)}
+          />
+          <Box
+            component="section"
+            sx={{
+              marginBottom: 4,
+            }}
+          >
+            {paginatedData.map((v) => (
+              <div key={v.articleId}>
+                <ArticleRow
+                  article={v}
+                  showPredictionVersion={developperMode}
+                />
+                <Divider />
+              </div>
+            ))}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Pagination
+              page={page}
+              color="primary"
+              onChange={(_, page) => setPage(page)}
+              count={calcMaxPages(articles.length, countPerPage)}
+            />
+          </Box>
+        </Box>
       )}
     </Layout>
   );

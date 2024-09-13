@@ -1,18 +1,27 @@
 import { MenuItem, Select } from "@mui/material";
-import { SortKinds, validSortKinds } from "../../domain/article";
+import {
+  FilterAndSortCriteria,
+  SortKinds,
+  validSortKinds,
+} from "../../domain/article";
 import { sortKindLabel } from "./types";
 
 type Props = {
-  sortKind: SortKinds;
-  onSortKindChange: (v: SortKinds) => void;
+  criteria: FilterAndSortCriteria;
+  onCriteriaChange: (v: FilterAndSortCriteria) => void;
 };
 
-export const FilterForm = ({ sortKind, onSortKindChange }: Props) => {
+export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
   return (
     <div>
       <Select
-        value={sortKind}
-        onChange={(e) => onSortKindChange(e.target.value as SortKinds)}
+        value={criteria.sortKind}
+        onChange={(e) =>
+          onCriteriaChange({
+            ...criteria,
+            sortKind: e.target.value as SortKinds,
+          })
+        }
       >
         {validSortKinds.map((v) => (
           <MenuItem key={v} value={v}>

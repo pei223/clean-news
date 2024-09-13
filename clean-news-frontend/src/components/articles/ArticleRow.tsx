@@ -1,21 +1,15 @@
 import { Box, Chip, Typography } from "@mui/material";
-import { Article } from "../../domain/article";
+import { ArticleWithDisplayDisable } from "../../domain/article";
 import { toDisplayDate } from "../../utils/dateUtil";
-import { intersection } from "lodash";
 
 type Props = {
-  filterTopics: string[];
-  filterCarefulLabels: string[];
-  article: Article;
+  article: ArticleWithDisplayDisable;
+  showPredictionVersion?: boolean;
 };
 export const ArticleRow = ({
-  filterTopics,
-  filterCarefulLabels,
   article,
+  showPredictionVersion = false,
 }: Props) => {
-  const blocked =
-    intersection(article.topics, filterTopics).length > 0 ||
-    intersection(article.carefulLabels, filterCarefulLabels).length > 0;
   return (
     <Box
       component="a"
@@ -27,7 +21,7 @@ export const ArticleRow = ({
         flexDirection: "row",
         cursor: "pointer",
         textDecoration: "none",
-        opacity: blocked ? 0.25 : 1,
+        opacity: article.displayDisabled ? 0.25 : 1,
       }}
     >
       <span>
@@ -54,8 +48,14 @@ export const ArticleRow = ({
                 width: "75px",
                 height: "75px",
               },
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "#AAA",
             }}
-          />
+          >
+            no image
+          </Box>
         )}
       </span>
       <Box
@@ -94,21 +94,32 @@ export const ArticleRow = ({
               color="default"
             />
           ))}
-          <div>
-            {article.carefulLabels.map((v) => (
+          {article.carefulLabels.map((v) => (
+            <Chip
+              key={v}
+              sx={{
+                paddingX: 1,
+                marginRight: 1,
+              }}
+              label={v}
+              size="small"
+              variant="filled"
+              color="error"
+            />
+          ))}
+          {showPredictionVersion && (
+            <div>
               <Chip
-                key={v}
                 sx={{
                   paddingX: 1,
                   marginRight: 1,
                 }}
-                label={v}
+                label={article.version}
                 size="small"
                 variant="filled"
-                color="error"
               />
-            ))}
-          </div>
+            </div>
+          )}
         </div>
       </Box>
     </Box>
