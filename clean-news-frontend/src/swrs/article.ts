@@ -22,6 +22,10 @@ const setArticlesToCache = (v: Article[], expiredAt: Date) => {
   localStorage.setItem(articlesCacheKey, vStr);
 };
 
+export const removeArticlesCache = () => {
+  localStorage.removeItem(articlesCacheKey);
+};
+
 const getArticlesFromCache = (): Article[] | null => {
   const cache = localStorage.getItem(articlesCacheKey);
   if (cache == null) {

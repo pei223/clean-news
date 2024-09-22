@@ -6,9 +6,9 @@ import {
   filterAndSortArticles,
 } from "../domain/article";
 import { ArticleRow } from "../components/articles/ArticleRow";
-import { Box, Divider, Pagination } from "@mui/material";
+import { Box, Button, Divider, Pagination } from "@mui/material";
 import { FilterForm } from "../components/articles/FilterForm";
-import { useArticles } from "../swrs/article";
+import { removeArticlesCache, useArticles } from "../swrs/article";
 import LoadingScreen from "../components/common/LoadingScreen";
 import { useSearchParams } from "react-router-dom";
 import { calcMaxPages } from "../utils/viewUtil";
@@ -17,7 +17,7 @@ import { AppContext } from "../App";
 
 export const IndexPage = () => {
   const { developperMode } = useContext(AppContext);
-  const { data: sourceArticles, loading } = useArticles();
+  const { data: sourceArticles, loading, mutate } = useArticles();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page")) || 1;
   const countPerPage = Number(searchParams.get("countPerPage")) || 10;
@@ -60,6 +60,17 @@ export const IndexPage = () => {
             marginBottom: "160px",
           }}
         >
+          {developperMode && (
+            <Button
+              onClick={() => {
+                removeArticlesCache();
+                mutate();
+              }}
+              variant="contained"
+            >
+              Clear cache
+            </Button>
+          )}
           <FilterForm
             criteria={criteria}
             onCriteriaChange={(v) => setCriteria(v)}
