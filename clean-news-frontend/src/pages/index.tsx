@@ -12,8 +12,8 @@ import { removeArticlesCache, useArticles } from '../stores/article'
 import LoadingScreen from '../components/common/LoadingScreen'
 import { useSearchParams } from 'react-router-dom'
 import { calcMaxPages } from '../utils/viewUtil'
-import { usePaginatedData } from '../utils/customHooks'
 import { AppContext } from '../stores/appContext'
+import { usePaginatedData } from '../hooks/common/pagination'
 
 export const IndexPage = () => {
   const { developperMode } = useContext(AppContext)
