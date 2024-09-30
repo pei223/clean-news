@@ -9,7 +9,11 @@ import { SWRConfig } from 'swr'
 import { useState } from 'react'
 import LoginPage from './pages/login'
 import { User } from 'firebase/auth'
+import RequireAuth from './components/common/RequireAuth'
 import { AppContext } from './stores/appContext'
+import { useAuthEffect } from './hooks/common/auth'
+import NoAuthenticatedLayout from './components/NoAuthenticatedLayout'
+import LoadingScreen from './components/common/LoadingScreen'
 
 const theme = createTheme({
   spacing: 8,
@@ -26,17 +30,25 @@ const theme = createTheme({
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <IndexPage />,
+    element: (
+      <RequireAuth>
+        <IndexPage />
+      </RequireAuth>
+    ),
   },
   {
     path: '/login',
     element: <LoginPage />,
+    handle: {},
   },
 ])
 
 function App() {
   const [developperMode, setDevelopperMode] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [userInitialized, setUserInitialized] = useState(false)
+
+  useAuthEffect({ setUser, setUserInitialized })
 
   return (
     <ThemeProvider theme={theme}>
@@ -54,7 +66,7 @@ function App() {
             }}
           >
             <ErrorBoundary FallbackComponent={AppErrorFallback}>
-              <RouterProvider router={router} />
+              {userInitialized ? <RouterProvider router={router} /> : <LoadingScreen />}
             </ErrorBoundary>
           </AppContext.Provider>
         </SnackbarProvider>
