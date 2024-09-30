@@ -1,13 +1,13 @@
 import useSWR, { SWRConfiguration } from "swr";
 import { Article } from "../domain/article";
 import { ArticleRepo } from "../repos/articleRepo";
-import { ApiHookResult } from "./helper/types";
+import { ApiHookResult } from "./swr-helper/types";
 import dayjs from "dayjs";
 import {
   CacheRecord,
   parseConsideringDate,
   stringifyConsideringDate,
-} from "./helper/cache";
+} from "./swr-helper/cache";
 
 const articlesCacheKey = "articles";
 

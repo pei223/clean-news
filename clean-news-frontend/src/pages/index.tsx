@@ -8,7 +8,7 @@ import {
 import { ArticleRow } from "../components/articles/ArticleRow";
 import { Box, Button, Divider, Pagination } from "@mui/material";
 import { FilterForm } from "../components/articles/FilterForm";
-import { removeArticlesCache, useArticles } from "../swrs/article";
+import { removeArticlesCache, useArticles } from "../stores/article";
 import LoadingScreen from "../components/common/LoadingScreen";
 import { useSearchParams } from "react-router-dom";
 import { calcMaxPages } from "../utils/viewUtil";
