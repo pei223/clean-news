@@ -1,8 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AppBar, Button, Container, Toolbar, Typography } from "@mui/material";
-// import HomeIcon from "@mui/icons-material/Home";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 interface menu {
   icon?: () => React.ReactNode;
@@ -25,6 +33,11 @@ function Layout({ children }: Props) {
   const navigate = useNavigate();
   const [appBarClickCount, setAppBarClickCount] = useState(0);
   const { developperMode, setDevelopperMode } = useContext(AppContext);
+
+  const onLogout = useCallback(async () => {
+    await signOut(auth);
+    navigate("/login");
+  }, [navigate]);
 
   // この辺は開発者モード切り替え用の処理
   const onClickAppBar = () => {
@@ -67,15 +80,23 @@ function Layout({ children }: Props) {
             )}
           </Typography>
 
-          {menuList.map((menu) => (
-            <Button
-              key={menu.link}
-              color="inherit"
-              onClick={() => navigate(menu.link)}
-            >
-              <Typography>{menu.text}</Typography>
+          <Box>
+            {menuList.map((menu) => (
+              <Button
+                key={menu.link}
+                color="inherit"
+                onClick={() => navigate(menu.link)}
+                sx={{
+                  marginRight: 2,
+                }}
+              >
+                <Typography>{menu.text}</Typography>
+              </Button>
+            ))}
+            <Button color="inherit" onClick={onLogout}>
+              <Typography>logout</Typography>
             </Button>
-          ))}
+          </Box>
         </Toolbar>
       </AppBar>
       <Toolbar />
