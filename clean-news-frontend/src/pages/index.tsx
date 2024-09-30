@@ -1,53 +1,53 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import Layout from "../components/layout";
+import { useCallback, useContext, useEffect, useState } from 'react'
+import Layout from '../components/layout'
 import {
   ArticleWithDisplayDisable,
   FilterAndSortCriteria,
   filterAndSortArticles,
-} from "../domain/article";
-import { ArticleRow } from "../components/articles/ArticleRow";
-import { Box, Button, Divider, Pagination } from "@mui/material";
-import { FilterForm } from "../components/articles/FilterForm";
-import { removeArticlesCache, useArticles } from "../stores/article";
-import LoadingScreen from "../components/common/LoadingScreen";
-import { useSearchParams } from "react-router-dom";
-import { calcMaxPages } from "../utils/viewUtil";
-import { usePaginatedData } from "../utils/customHooks";
-import { AppContext } from "../App";
+} from '../domain/article'
+import { ArticleRow } from '../components/articles/ArticleRow'
+import { Box, Button, Divider, Pagination } from '@mui/material'
+import { FilterForm } from '../components/articles/FilterForm'
+import { removeArticlesCache, useArticles } from '../stores/article'
+import LoadingScreen from '../components/common/LoadingScreen'
+import { useSearchParams } from 'react-router-dom'
+import { calcMaxPages } from '../utils/viewUtil'
+import { usePaginatedData } from '../utils/customHooks'
+import { AppContext } from '../stores/appContext'
 
 export const IndexPage = () => {
-  const { developperMode } = useContext(AppContext);
-  const { data: sourceArticles, loading, mutate } = useArticles();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page")) || 1;
-  const countPerPage = Number(searchParams.get("countPerPage")) || 10;
+  const { developperMode } = useContext(AppContext)
+  const { data: sourceArticles, loading, mutate } = useArticles()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = Number(searchParams.get('page')) || 1
+  const countPerPage = Number(searchParams.get('countPerPage')) || 10
 
   const [criteria, setCriteria] = useState<FilterAndSortCriteria>({
-    blockedArticleVisibility: "remove",
-    filterTopics: ["芸能", "トレンド"],
-    filterCarefulLabels: ["死去", "暴力", "不祥事"],
-    sortKind: "created-at-desc",
-  });
+    blockedArticleVisibility: 'remove',
+    filterTopics: ['芸能', 'トレンド'],
+    filterCarefulLabels: ['死去', '暴力', '不祥事'],
+    sortKind: 'created-at-desc',
+  })
 
-  const [articles, setArticles] = useState<ArticleWithDisplayDisable[]>([]);
+  const [articles, setArticles] = useState<ArticleWithDisplayDisable[]>([])
 
-  const paginatedData = usePaginatedData(articles, page, countPerPage);
+  const paginatedData = usePaginatedData(articles, page, countPerPage)
 
   useEffect(() => {
     if (sourceArticles == null) {
-      return;
+      return
     }
-    const filteredArticles = filterAndSortArticles(sourceArticles, criteria);
-    setArticles(filteredArticles);
-  }, [sourceArticles, criteria, page, countPerPage]);
+    const filteredArticles = filterAndSortArticles(sourceArticles, criteria)
+    setArticles(filteredArticles)
+  }, [sourceArticles, criteria, page, countPerPage])
 
   const setPage = useCallback(
     (newPage: number) => {
-      searchParams.set("page", newPage.toString());
-      setSearchParams(searchParams);
+      searchParams.set('page', newPage.toString())
+      setSearchParams(searchParams)
     },
     [searchParams, setSearchParams]
-  );
+  )
 
   return (
     <Layout>
@@ -57,24 +57,21 @@ export const IndexPage = () => {
         <Box
           sx={{
             marginTop: 2,
-            marginBottom: "160px",
+            marginBottom: '160px',
           }}
         >
           {developperMode && (
             <Button
               onClick={() => {
-                removeArticlesCache();
-                mutate();
+                removeArticlesCache()
+                mutate()
               }}
               variant="contained"
             >
               Clear cache
             </Button>
           )}
-          <FilterForm
-            criteria={criteria}
-            onCriteriaChange={(v) => setCriteria(v)}
-          />
+          <FilterForm criteria={criteria} onCriteriaChange={(v) => setCriteria(v)} />
           <Box
             component="section"
             sx={{
@@ -83,18 +80,15 @@ export const IndexPage = () => {
           >
             {paginatedData.map((v) => (
               <div key={v.articleId}>
-                <ArticleRow
-                  article={v}
-                  showPredictionVersion={developperMode}
-                />
+                <ArticleRow article={v} showPredictionVersion={developperMode} />
                 <Divider />
               </div>
             ))}
           </Box>
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "center",
+              display: 'flex',
+              justifyContent: 'center',
             }}
           >
             <Pagination
@@ -107,5 +101,5 @@ export const IndexPage = () => {
         </Box>
       )}
     </Layout>
-  );
-};
+  )
+}

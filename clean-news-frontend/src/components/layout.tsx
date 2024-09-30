@@ -1,82 +1,73 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { AppContext } from "../App";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { AppBar, Box, Button, Container, Toolbar, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { signOut } from 'firebase/auth'
+import { auth } from '../firebase'
+import { AppContext } from '../stores/appContext'
 
 interface menu {
-  icon?: () => React.ReactNode;
-  link: string;
-  text: string;
+  icon?: () => React.ReactNode
+  link: string
+  text: string
 }
 
 const menuList: menu[] = [
   {
-    link: "/",
-    text: "記事一覧",
+    link: '/',
+    text: '記事一覧',
   },
-];
+]
 
 type Props = {
-  children?: React.ReactNode;
-};
+  children?: React.ReactNode
+}
 
 function Layout({ children }: Props) {
-  const navigate = useNavigate();
-  const [appBarClickCount, setAppBarClickCount] = useState(0);
-  const { developperMode, setDevelopperMode } = useContext(AppContext);
+  const navigate = useNavigate()
+  const [appBarClickCount, setAppBarClickCount] = useState(0)
+  const { developperMode, setDevelopperMode } = useContext(AppContext)
 
   const onLogout = useCallback(async () => {
-    await signOut(auth);
-    navigate("/login");
-  }, [navigate]);
+    await signOut(auth)
+    navigate('/login')
+  }, [navigate])
 
   // この辺は開発者モード切り替え用の処理
   const onClickAppBar = () => {
-    console.log(appBarClickCount + 1);
+    console.log(appBarClickCount + 1)
     if (appBarClickCount + 1 > 5) {
-      setDevelopperMode(true);
+      setDevelopperMode(true)
     }
-    setAppBarClickCount(appBarClickCount + 1);
-  };
+    setAppBarClickCount(appBarClickCount + 1)
+  }
   useEffect(() => {
     const id = setInterval(() => {
-      console.log(0);
-      setAppBarClickCount(0);
-    }, 3000);
-    return () => clearInterval(id);
-  }, [setAppBarClickCount]);
+      console.log(0)
+      setAppBarClickCount(0)
+    }, 3000)
+    return () => clearInterval(id)
+  }, [setAppBarClickCount])
 
   return (
     <>
       <AppBar>
         <Toolbar
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
           onClick={onClickAppBar}
         >
           <Typography
             variant="h6"
             marginLeft="20px"
-            sx={{ cursor: "pointer" }}
-            onClick={() => navigate("/")}
+            sx={{ cursor: 'pointer' }}
+            onClick={() => navigate('/')}
           >
             Clean news
             {developperMode && (
-              <span style={{ fontWeight: "bold", marginLeft: "10px" }}>
-                (dev mode)
-              </span>
+              <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>(dev mode)</span>
             )}
           </Typography>
 
@@ -102,7 +93,7 @@ function Layout({ children }: Props) {
       <Toolbar />
       <Container sx={{ paddingTop: 2 }}>{children}</Container>
     </>
-  );
+  )
 }
 
-export default Layout;
+export default Layout
