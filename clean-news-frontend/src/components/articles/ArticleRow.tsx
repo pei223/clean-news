@@ -1,15 +1,12 @@
-import { Box, Chip, Typography } from "@mui/material";
-import { ArticleWithDisplayDisable } from "../../domain/article";
-import { toDisplayDate } from "../../utils/dateUtil";
+import { Box, Chip, Typography } from '@mui/material'
+import { ArticleWithDisplayDisable } from '../../domain/article'
+import { toDisplayDate } from '../../utils/dateUtil'
 
 type Props = {
-  article: ArticleWithDisplayDisable;
-  showPredictionVersion?: boolean;
-};
-export const ArticleRow = ({
-  article,
-  showPredictionVersion = false,
-}: Props) => {
+  article: ArticleWithDisplayDisable
+  showPredictionVersion?: boolean
+}
+export const ArticleRow = ({ article, showPredictionVersion = false }: Props) => {
   return (
     <Box
       component="a"
@@ -17,10 +14,10 @@ export const ArticleRow = ({
       target="_blank"
       sx={{
         margin: 2,
-        display: "flex",
-        flexDirection: "row",
-        cursor: "pointer",
-        textDecoration: "none",
+        display: 'flex',
+        flexDirection: 'row',
+        cursor: 'pointer',
+        textDecoration: 'none',
         opacity: article.displayDisabled ? 0.25 : 1,
       }}
     >
@@ -28,30 +25,30 @@ export const ArticleRow = ({
         {article.thumbnailUrl ? (
           <Box
             component="img"
-            src={article.thumbnailUrl || ""}
+            src={article.thumbnailUrl || ''}
             sx={{
-              borderRadius: "5%",
-              width: "120px",
-              "@media (max-width:960px)": {
-                width: "75px",
+              borderRadius: '5%',
+              width: '120px',
+              '@media (max-width:960px)': {
+                width: '75px',
               },
             }}
           />
         ) : (
           <Box
             sx={{
-              borderRadius: "5%",
-              width: "120px",
-              height: "120px",
-              background: "#F8F8F8",
-              "@media (max-width:960px)": {
-                width: "75px",
-                height: "75px",
+              borderRadius: '5%',
+              width: '120px',
+              height: '120px',
+              background: '#F8F8F8',
+              '@media (max-width:960px)': {
+                width: '75px',
+                height: '75px',
               },
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#AAA",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: '#AAA',
             }}
           >
             no image
@@ -60,9 +57,9 @@ export const ArticleRow = ({
       </span>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
           paddingY: 1,
           paddingX: 2,
         }}
@@ -123,5 +120,5 @@ export const ArticleRow = ({
         </div>
       </Box>
     </Box>
-  );
-};
+  )
+}

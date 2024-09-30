@@ -12,7 +12,6 @@ import { User } from 'firebase/auth'
 import RequireAuth from './components/common/RequireAuth'
 import { AppContext } from './stores/appContext'
 import { useAuthEffect } from './hooks/common/auth'
-import NoAuthenticatedLayout from './components/NoAuthenticatedLayout'
 import LoadingScreen from './components/common/LoadingScreen'
 
 const theme = createTheme({

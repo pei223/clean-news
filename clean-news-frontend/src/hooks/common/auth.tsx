@@ -19,5 +19,5 @@ export const useAuthEffect = ({ setUser, setUserInitialized }: Args) => {
       setUser(user)
     })
     return unsubscribe
-  }, [setUser])
+  }, [setUser, setUserInitialized])
 }

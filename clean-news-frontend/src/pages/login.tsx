@@ -1,41 +1,40 @@
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { Box, Button, TextField, Typography } from "@mui/material";
-import { useSnackbar } from "notistack";
-import NoAuthenticatedLayout from "../components/NoAuthenticatedLayout";
-import LoadingScreen from "../components/common/LoadingScreen";
-import { isCredentialError, isFirebaseError } from "../utils/firebase-errors";
-import { auth } from "../firebase";
-
+import { useState } from 'react'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
+import { Box, Button, TextField, Typography } from '@mui/material'
+import { useSnackbar } from 'notistack'
+import NoAuthenticatedLayout from '../components/NoAuthenticatedLayout'
+import LoadingScreen from '../components/common/LoadingScreen'
+import { isCredentialError, isFirebaseError } from '../utils/firebase-errors'
+import { auth } from '../firebase'
 
 function LoginPage() {
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
 
   const onLogin = async () => {
     try {
-      setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/");
+      setLoading(true)
+      await signInWithEmailAndPassword(auth, email, password)
+      navigate('/')
     } catch (e) {
       if (!isFirebaseError(e)) {
-        enqueueSnackbar(`unexpected error: ${e}`, { variant: "error" });
-        return;
+        enqueueSnackbar(`unexpected error: ${e}`, { variant: 'error' })
+        return
       }
       if (isCredentialError(e)) {
-        enqueueSnackbar("認証情報が正しくありません", { variant: "warning" });
-        return;
+        enqueueSnackbar('認証情報が正しくありません', { variant: 'warning' })
+        return
       }
-      enqueueSnackbar(`unexpected firebase error: ${e}`, { variant: "error" });
+      enqueueSnackbar(`unexpected firebase error: ${e}`, { variant: 'error' })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <NoAuthenticatedLayout>
@@ -62,6 +61,6 @@ function LoginPage() {
       </Box>
       {loading && <LoadingScreen />}
     </NoAuthenticatedLayout>
-  );
+  )
 }
-export default LoginPage;
+export default LoginPage

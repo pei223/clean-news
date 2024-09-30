@@ -11,22 +11,22 @@ import {
   Select,
   TextField,
   Typography,
-} from "@mui/material";
+} from '@mui/material'
 import {
   BlockedArticleVisibility,
   FilterAndSortCriteria,
   SortKinds,
   validBlockedArticleVisibility,
   validSortKinds,
-} from "../../domain/article";
-import { blockedArticleVisibilityLabel, sortKindLabel } from "./types";
-import { Topics, carefulLabels } from "../../domain/parameters";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+} from '../../domain/article'
+import { blockedArticleVisibilityLabel, sortKindLabel } from './types'
+import { Topics, carefulLabels } from '../../domain/parameters'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 type Props = {
-  criteria: FilterAndSortCriteria;
-  onCriteriaChange: (v: FilterAndSortCriteria) => void;
-};
+  criteria: FilterAndSortCriteria
+  onCriteriaChange: (v: FilterAndSortCriteria) => void
+}
 
 export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
   return (
@@ -85,8 +85,7 @@ export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
                   onChange={(e) =>
                     onCriteriaChange({
                       ...criteria,
-                      blockedArticleVisibility: e.target
-                        .value as BlockedArticleVisibility,
+                      blockedArticleVisibility: e.target.value as BlockedArticleVisibility,
                     })
                   }
                 >
@@ -106,28 +105,24 @@ export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
                 disableCloseOnSelect
                 size="small"
                 onChange={(_, newValue: string[]) => {
-                  console.log(newValue);
+                  console.log(newValue)
                   onCriteriaChange({
                     ...criteria,
                     filterTopics: newValue,
-                  });
+                  })
                 }}
                 renderOption={(props, option, { selected }) => {
-                  const { key, ...optionProps } = props;
+                  const { key, ...optionProps } = props
                   return (
                     <li key={key as string} {...optionProps}>
                       <Checkbox checked={selected} />
                       {option}
                     </li>
-                  );
+                  )
                 }}
                 renderInput={(params) => (
                   <div>
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label="ブロックするトピック"
-                    />
+                    <TextField {...params} variant="outlined" label="ブロックするトピック" />
                   </div>
                 )}
               />
@@ -140,28 +135,24 @@ export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
                 disableCloseOnSelect
                 size="small"
                 onChange={(_, newValue: string[]) => {
-                  console.log(newValue);
+                  console.log(newValue)
                   onCriteriaChange({
                     ...criteria,
                     filterCarefulLabels: newValue,
-                  });
+                  })
                 }}
                 renderOption={(props, option, { selected }) => {
-                  const { key, ...optionProps } = props;
+                  const { key, ...optionProps } = props
                   return (
                     <li key={key as string} {...optionProps}>
                       <Checkbox checked={selected} />
                       {option}
                     </li>
-                  );
+                  )
                 }}
                 renderInput={(params) => (
                   <div>
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label="ブロックする注意ラベル"
-                    />
+                    <TextField {...params} variant="outlined" label="ブロックする注意ラベル" />
                   </div>
                 )}
               />
@@ -170,5 +161,5 @@ export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
         </AccordionDetails>
       </Accordion>
     </div>
-  );
-};
+  )
+}

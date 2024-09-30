@@ -46,7 +46,7 @@ export const IndexPage = () => {
       searchParams.set('page', newPage.toString())
       setSearchParams(searchParams)
     },
-    [searchParams, setSearchParams]
+    [searchParams, setSearchParams],
   )
 
   return (

@@ -1,8 +1,8 @@
-import { KeyedMutator } from "swr";
+import { KeyedMutator } from 'swr'
 
 export type ApiHookResult<ResType> = {
-  data?: ResType;
-  loading: boolean;
-  error?: Error;
-  mutate: KeyedMutator<ResType>;
-};
+  data?: ResType
+  loading: boolean
+  error?: Error
+  mutate: KeyedMutator<ResType>
+}
