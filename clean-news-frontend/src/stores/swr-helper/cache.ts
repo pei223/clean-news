@@ -5,7 +5,7 @@ const timestampExp = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
 // providerの初期化前に取得が走るため意味がない
 export function localStorageProvider(): Cache {
   const map = new Map(
-    JSON.parse(localStorage.getItem('app-cache') || '[]', (k, v) => {
+    JSON.parse(localStorage.getItem('app-cache') || '[]', (_, v) => {
       if (typeof v === 'string' && timestampExp.test(v)) {
         return new Date(v)
       }
@@ -16,7 +16,7 @@ export function localStorageProvider(): Cache {
   // アプリが終了する前に、すべてのデータを `localStorage` に保存します。
   window.addEventListener('beforeunload', () => {
     console.log('save cache')
-    const appCache = JSON.stringify(Array.from(map.entries()), (k, v) => {
+    const appCache = JSON.stringify(Array.from(map.entries()), (_, v) => {
       if (v != null && typeof v.toISOString === 'function') {
         return v.toISOString()
       }
