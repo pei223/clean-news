@@ -7,18 +7,11 @@ import { getAnalytics } from 'firebase/analytics'
 // https://firebase.google.com/docs/web/setup#available-libraries
 import 'firebase/compat/analytics'
 import { getAuth } from 'firebase/auth'
+import firebaseConfigJson from './firebase-config.json'
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: 'AIzaSyBe7dD8uIcMYJJjNjt4URNkCrTd6rO2dIk',
-  authDomain: 'clean-news-dev.firebaseapp.com',
-  projectId: 'clean-news-dev',
-  storageBucket: 'clean-news-dev.appspot.com',
-  messagingSenderId: '342691815715',
-  appId: '1:342691815715:web:e52b7a5b970c24e07aac96',
-  measurementId: 'G-VWKGPQMBTX',
-}
+const firebaseConfig = firebaseConfigJson
 
 // Initialize Firebase
 export const app = firebase.initializeApp(firebaseConfig)

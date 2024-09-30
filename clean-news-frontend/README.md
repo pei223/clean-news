@@ -1,4 +1,10 @@
 # フィルタリングが強いニュースサイトのフロントエンド
+## setup
+```
+$ npm i
+$ sops -d src/firebase-config.dev.enc.json > src/firebase-config.json 
+```
+
 ## local server
 ```
 $ npm run dev

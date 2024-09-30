@@ -1,0 +1,27 @@
+{
+	"apiKey": "ENC[AES256_GCM,data:LOQBgtO9uJNZ0aDeVFwcEjc6EQmf75zU4R+G9uD2YRg3vR4vW2st,iv:mkglR7zxLCtY7eFcbRQH2rLf5BrakzpYMtM5EzjUtBk=,tag:KTvI3nJyqmG3bOnzzxWKXQ==,type:str]",
+	"authDomain": "ENC[AES256_GCM,data:HnzaDWo1yYJcLMpj3bmJl5Em6G48wPkevFXw3GIJ,iv:pSER8HJbvhC1RAE5OaRnwwnMk8mb/sKIOQuAqK+jOS8=,tag:e6s/rC+jLhewTR2I/ockIA==,type:str]",
+	"projectId": "ENC[AES256_GCM,data:Ga8uRRXWrMoTcYxpG9k=,iv:ml95JJNqeFwgnug05U988mzL6fJs8tM7XzXUAnRzBv0=,tag:njYMhpXIeXCsCYpIwyvrrA==,type:str]",
+	"storageBucket": "ENC[AES256_GCM,data:p+Zsq7UlFcP3DFw1xzcJQGjU4AvB9w+Y598=,iv:26dA04ZEwZX8UX9FrHm9pFnYVeYcUFbH6l0mrJiT9vc=,tag:qideP7IQxJdSLZj/R2hugQ==,type:str]",
+	"messagingSenderId": "ENC[AES256_GCM,data:VwqTCYUVnxCKFzf1,iv:eb0EtIkG54Gx3RZzCt5XXYELNjctn8OJWrm1wjgCIBQ=,tag:d9pJ18svYQCdavuijBD8gQ==,type:str]",
+	"appId": "ENC[AES256_GCM,data:4ja5QKV9Nz1R8C7zI2n+IuUBvewLjT0eFy+3x02dITrc6JPvQL7LI3k=,iv:/8NUAFeutsF9emScU+v8hW38/Dssjx2KTDoJPfg6S1w=,tag:uR3T22JFhIOJIQ9QLrYfag==,type:str]",
+	"measurementId": "ENC[AES256_GCM,data:L2OfpXzQkKIK2z2Y,iv:NVw2mFzNxbJ9Ub3mPn7D2NayWH/kZHPz+JwOKvF0xCc=,tag:EJxY1Tuiv/U4YTetYOeGuQ==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": [
+			{
+				"resource_id": "projects/clean-news-dev/locations/global/keyRings/sops/cryptoKeys/sops-key",
+				"created_at": "2024-09-30T14:11:06Z",
+				"enc": "CiQAB9GFYRU8QnStUGsWHxXiqVK9GayZCoYF3rGC70OM/L3aLJ4SSQBLCPDF+8iv96ZfiAFyqtVRO48zLDxM2S14zdDimxmh3xHWJaFPCY1XnDqzICITjYfCriINZ5o2zjXwrsEEC1vdinmq0jFOHH0="
+			}
+		],
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": null,
+		"lastmodified": "2024-09-30T14:11:07Z",
+		"mac": "ENC[AES256_GCM,data:YOVS0P18K2U+xN9ylPqg2G42pIyN++HE7VnwLH/4oCiGMz/lRkq0OTHNcQzVaNrCW8lT1mUJO18gSyS0YxRLDfbGI9HIpCaPFsl4gkUOKNjh5bMnxQOEtBxquNtFGIKG1qtse8VgjUlIve+mN33KPW0X2dVmnZSq7PXt8ov0Ms4=,iv:MeWmlH6z+Yw765U1DScMLzT5XTANG9zG8zMaN5APZoc=,tag:bQjusNM/gbKckFxwr1cNUw==,type:str]",
+		"pgp": null,
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.9.0"
+	}
+}
