@@ -2,7 +2,7 @@
 ## setup
 ```
 $ npm i
-$ sops -d src/firebase-config.dev.enc.json > src/firebase-config.json 
+$ sops -d .dev.enc.env > .env 
 ```
 
 ## local server
@@ -27,3 +27,6 @@ $ npm run format
 - フィルタリング設定永続化
 - 環境変数を各環境で変える
   - コマンドで.envコピーするのが手っ取り早そう
+- Vercelデプロイどうしよう
+  - jsonじゃなくて環境変数にしてそれ読み込ませる
+  - Vercelでは直接書き込めばいい
