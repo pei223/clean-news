@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Layout from '../components/layout'
 import {
   ArticleWithDisplayDisable,
@@ -6,21 +6,26 @@ import {
   filterAndSortArticles,
 } from '../domain/article'
 import { ArticleRow } from '../components/articles/ArticleRow'
-import { Box, Button, Divider, Pagination } from '@mui/material'
+import { Box, Button, Divider, TablePagination } from '@mui/material'
 import { FilterForm } from '../components/articles/FilterForm'
 import { removeArticlesCache, useArticles } from '../stores/article'
 import LoadingScreen from '../components/common/LoadingScreen'
-import { useSearchParams } from 'react-router-dom'
-import { calcMaxPages } from '../utils/viewUtil'
 import { AppContext } from '../stores/appContext'
 import { usePaginatedData } from '../hooks/common/pagination'
+import { useStateBySearchParams } from '../hooks/common/router'
+import { useSearchParams } from 'react-router-dom'
 
 export const IndexPage = () => {
   const { developperMode } = useContext(AppContext)
   const { data: sourceArticles, loading, mutate } = useArticles()
   const [searchParams, setSearchParams] = useSearchParams()
-  const page = Number(searchParams.get('page')) || 1
-  const countPerPage = Number(searchParams.get('countPerPage')) || 10
+
+  const [page, updatePageSearchParams] = useStateBySearchParams<number>(searchParams, 'page', 1)
+  const [countPerPage, updateCountPerPageSearchParams] = useStateBySearchParams<number>(
+    searchParams,
+    'countPerPage',
+    10,
+  )
 
   const [criteria, setCriteria] = useState<FilterAndSortCriteria>({
     blockedArticleVisibility: 'remove',
@@ -37,17 +42,11 @@ export const IndexPage = () => {
     if (sourceArticles == null) {
       return
     }
+    const newSearchParams = updatePageSearchParams(searchParams, 1)
+    setSearchParams(newSearchParams)
     const filteredArticles = filterAndSortArticles(sourceArticles, criteria)
     setArticles(filteredArticles)
-  }, [sourceArticles, criteria, page, countPerPage])
-
-  const setPage = useCallback(
-    (newPage: number) => {
-      searchParams.set('page', newPage.toString())
-      setSearchParams(searchParams)
-    },
-    [searchParams, setSearchParams],
-  )
+  }, [sourceArticles, criteria])
 
   return (
     <Layout>
@@ -91,11 +90,23 @@ export const IndexPage = () => {
               justifyContent: 'center',
             }}
           >
-            <Pagination
-              page={page}
-              color="primary"
-              onChange={(_, page) => setPage(page)}
-              count={calcMaxPages(articles.length, countPerPage)}
+            <TablePagination
+              component="div"
+              page={page - 1}
+              onPageChange={(_, page) => {
+                const newSearchParams = updatePageSearchParams(searchParams, page + 1)
+                setSearchParams(newSearchParams)
+              }}
+              rowsPerPage={countPerPage}
+              onRowsPerPageChange={(e) => {
+                const newSearchParams = updateCountPerPageSearchParams(
+                  updatePageSearchParams(searchParams, 1),
+                  Number(e.target.value),
+                )
+                setSearchParams(newSearchParams)
+              }}
+              count={articles.length}
+              rowsPerPageOptions={[5, 10, 20, 50]}
             />
           </Box>
         </Box>
