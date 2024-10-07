@@ -1,4 +1,9 @@
 # フィルタリングが強いニュースサイトのフロントエンド
+## ツール
+- gcloud CLI
+- sops
+    - https://github.com/getsops/sops?tab=readme-ov-file#23encrypting-using-gcp-kms
+
 ## setup
 ```
 $ npm i
@@ -20,13 +25,3 @@ $ npm run build
 $ npm run lint
 $ npm run format
 ```
-
-
-
-## やること
-- フィルタリング設定永続化
-- 環境変数を各環境で変える
-  - コマンドで.envコピーするのが手っ取り早そう
-- Vercelデプロイどうしよう
-  - jsonじゃなくて環境変数にしてそれ読み込ませる
-  - Vercelでは直接書き込めばいい
