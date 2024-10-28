@@ -14,10 +14,19 @@ import { AppContext } from '../stores/appContext'
 import { usePaginatedData } from '../hooks/common/pagination'
 import { useStateBySearchParams } from '../hooks/common/router'
 import { useSearchParams } from 'react-router-dom'
+import { removeUserCache, updateUserData, useUserData } from '../stores/user'
+import { useSnackbar } from 'notistack'
+import { DefaultUserData } from '../domain/user'
 
 export const IndexPage = () => {
-  const { developperMode } = useContext(AppContext)
-  const { data: sourceArticles, loading, mutate } = useArticles()
+  const { enqueueSnackbar } = useSnackbar()
+  const { developperMode, user } = useContext(AppContext)
+  const { data: sourceArticles, loading: articleLoading, mutate: mutateArticle } = useArticles()
+  const {
+    data: userData,
+    loading: userDataLoading,
+    mutate: mutateUserData,
+  } = useUserData(user!.uid)
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [page, updatePageSearchParams] = useStateBySearchParams<number>(searchParams, 'page', 1)
@@ -27,12 +36,7 @@ export const IndexPage = () => {
     10,
   )
 
-  const [criteria, setCriteria] = useState<FilterAndSortCriteria>({
-    blockedArticleVisibility: 'remove',
-    filterTopics: ['芸能', 'トレンド'],
-    filterCarefulLabels: ['死去', '暴力', '不祥事'],
-    sortKind: 'created-at-desc',
-  })
+  const [criteria, setCriteria] = useState<FilterAndSortCriteria>(userData || DefaultUserData)
 
   const [articles, setArticles] = useState<ArticleWithDisplayDisable[]>([])
 
@@ -48,9 +52,47 @@ export const IndexPage = () => {
     setArticles(filteredArticles)
   }, [sourceArticles, criteria])
 
+  useEffect(() => {
+    if (userData == null || criteria == null) {
+      return
+    }
+    setCriteria({
+      blockedArticleVisibility: userData.blockedArticleVisibility,
+      filterTopics: userData.filterTopics,
+      filterCarefulLabels: userData.filterCarefulLabels,
+      sortKind: userData.sortKind,
+    })
+  }, [userData])
+
+  const removeCachesAndRefetch = async () => {
+    removeArticlesCache()
+    await mutateArticle()
+    removeUserCache()
+    await mutateUserData()
+  }
+
+  const updateCriteria = async (criteria: FilterAndSortCriteria) => {
+    setCriteria(criteria)
+    try {
+      await updateUserData(user!.uid, {
+        ...criteria,
+        // TODO 未実装なので空配列を入れておく
+        freeKeywords: [],
+      })
+      // 永続化 & キャッシュ保存しており、stateも更新できているので
+      // わざわざmutateする必要はない.
+    } catch (e) {
+      console.error(e)
+      enqueueSnackbar({
+        message: 'フィルタリング設定の更新に失敗しました',
+        variant: 'error',
+      })
+    }
+  }
+
   return (
     <Layout>
-      {loading ? (
+      {articleLoading || userDataLoading ? (
         <LoadingScreen />
       ) : (
         <Box
@@ -60,17 +102,11 @@ export const IndexPage = () => {
           }}
         >
           {developperMode && (
-            <Button
-              onClick={() => {
-                removeArticlesCache()
-                mutate()
-              }}
-              variant="contained"
-            >
+            <Button onClick={removeCachesAndRefetch} variant="contained">
               Clear cache
             </Button>
           )}
-          <FilterForm criteria={criteria} onCriteriaChange={(v) => setCriteria(v)} />
+          <FilterForm criteria={criteria} onCriteriaChange={updateCriteria} />
           <Box
             component="section"
             sx={{
