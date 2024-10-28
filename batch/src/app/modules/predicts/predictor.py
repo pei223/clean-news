@@ -71,21 +71,16 @@ class Predictor:
             lambda x: history,
         )
         self._article_max_char_len_for_predict = article_max_char_len_for_predict
-        self._prediction_count = 0
 
     def memorize_for_init(self):
         memorize_for_init_res = self._memorize_chain.invoke(
             _topic_and_careful_label_input_template,
             config={"configurable": {"session_id": self._session_id}},
         )
-        _logger.debug("memorize for init res", res=memorize_for_init_res)
+        _logger.info("memorize for init res", res=memorize_for_init_res)
         return self
 
     def memorize_article(self, article: Article) -> Self:
-        if self._prediction_count > 0 and self._prediction_count % 60 == 0:
-            # NOTE: 100件あたりから記憶したトピックを忘れるため、再度記憶
-            _logger.debug("re-memorize for init", count=self._prediction_count)
-            self.memorize_for_init()
         article_input = _article_input_template.format(
             title=article.title,
             body=article.body[: self._article_max_char_len_for_predict],
@@ -98,30 +93,28 @@ class Predictor:
         return self
 
     def predict(self, article: Article) -> ArticleWithFeature:
-        self._prediction_count += 1
         topic_res = self._topic_chain.invoke(
             _topic_prediction_input,
             config={"configurable": {"session_id": self._session_id}},
         )
-        _logger.debug("topics res", res=topic_res)
+        if self._is_forget_topics(topic_res):
+            _logger.info("re-memorize for init", res=topic_res)
+            self.memorize_for_init()
+            topic_res = self._topic_chain.invoke(
+                _topic_prediction_input,
+                config={"configurable": {"session_id": self._session_id}},
+            )
+
+        _logger.debug("topics res", res=topic_res, article_title=article.title)
         return ArticleWithFeature(
             **asdict(article),
             topics=filter_by_candidates(topic_res, TOPICS),
             careful_labels=filter_by_candidates(topic_res, CAREFUL_LABELS),
         )
 
-    def _predict_topics(self) -> list[str]:
-        topic_res = self._topic_chain.invoke(
-            _topic_prediction_input,
-            config={"configurable": {"session_id": self._session_id}},
+    def _is_forget_topics(self, res: list[str]) -> bool:
+        return (
+            "トピックが" in ".".join(res)
+            or "できません" in ".".join(res)
+            or "出来ません" in ".".join(res)
         )
-        _logger.debug("topics res", res=topic_res)
-        return filter_by_candidates(topic_res, TOPICS)
-
-    def _predict_careful_labels(self) -> list[str]:
-        careful_labels_res = self._careful_label_chain.invoke(
-            _careful_label_prediction_input,
-            config={"configurable": {"session_id": self._session_id}},
-        )
-        _logger.debug("careful labels res", res=careful_labels_res)
-        return filter_by_candidates(careful_labels_res, CAREFUL_LABELS)

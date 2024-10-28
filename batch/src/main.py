@@ -41,14 +41,14 @@ for i, article_summary in enumerate(article_summaries):
         continue
     logger.info("predict article", idx=i, max_len=len(article_summaries))
     article_with_feature = predictor.memorize_article(article).predict(article)
-    logger.debug(
+    logger.info(
         "predicted",
         article_title=article.title,
         article_keywords=article.keywords,
         topics=article_with_feature.topics,
         careful_labels=article_with_feature.careful_labels,
     )
-    logger.info("save article", idx=i, max_len=len(article_summaries))
+    logger.debug("save article", idx=i, max_len=len(article_summaries))
     repo.save(article_with_feature, "20240827-6")
     time.sleep(0.5)
 logger.info("save finished", limit_min_date=limit_min_date)
