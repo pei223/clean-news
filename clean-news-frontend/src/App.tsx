@@ -51,7 +51,13 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <SWRConfig>
+      <SWRConfig
+        value={{
+          onError: (error) => {
+            console.error(error)
+          },
+        }}
+      >
         <SnackbarProvider
           maxSnack={5}
           anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
