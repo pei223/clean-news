@@ -6,7 +6,7 @@ import {
   filterAndSortArticles,
 } from '../domain/article'
 import { ArticleRow } from '../components/articles/ArticleRow'
-import { Box, Button, Divider, TablePagination } from '@mui/material'
+import { Box, Button, Divider, TablePagination, Typography } from '@mui/material'
 import { FilterForm } from '../components/articles/FilterForm'
 import { removeArticlesCache, useArticles } from '../stores/article'
 import LoadingScreen from '../components/common/LoadingScreen'
@@ -101,6 +101,15 @@ export const IndexPage = () => {
             marginBottom: '160px',
           }}
         >
+          <Typography
+            variant="h5"
+            component="h1"
+            sx={{
+              marginBottom: 3,
+            }}
+          >
+            ニュース記事一覧
+          </Typography>
           {developperMode && (
             <Button onClick={removeCachesAndRefetch} variant="contained">
               Clear cache
@@ -110,6 +119,7 @@ export const IndexPage = () => {
           <Box
             component="section"
             sx={{
+              marginTop: 4,
               marginBottom: 4,
             }}
           >

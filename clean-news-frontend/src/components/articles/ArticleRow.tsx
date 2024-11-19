@@ -1,12 +1,15 @@
 import { Box, Chip, Typography } from '@mui/material'
 import { ArticleWithDisplayDisable } from '../../domain/article'
 import { toDisplayDate } from '../../utils/dateUtil'
+import { useState } from 'react'
 
 type Props = {
   article: ArticleWithDisplayDisable
   showPredictionVersion?: boolean
 }
 export const ArticleRow = ({ article, showPredictionVersion = false }: Props) => {
+  const [isThumbnailError, setThumbnailError] = useState(false)
+
   return (
     <Box
       component="a"
@@ -22,24 +25,25 @@ export const ArticleRow = ({ article, showPredictionVersion = false }: Props) =>
       }}
     >
       <span>
-        {article.thumbnailUrl ? (
+        {article.thumbnailUrl && !isThumbnailError ? (
           <Box
             component="img"
             src={article.thumbnailUrl || ''}
             sx={{
               borderRadius: '5%',
-              width: '120px',
+              width: '100px',
               '@media (max-width:960px)': {
                 width: '75px',
               },
             }}
+            onError={() => setThumbnailError(true)}
           />
         ) : (
           <Box
             sx={{
               borderRadius: '5%',
-              width: '120px',
-              height: '120px',
+              width: '100px',
+              height: '100px',
               background: '#F8F8F8',
               '@media (max-width:960px)': {
                 width: '75px',
@@ -60,20 +64,23 @@ export const ArticleRow = ({ article, showPredictionVersion = false }: Props) =>
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          paddingY: 1,
           paddingX: 2,
         }}
       >
         <div>
-          <Typography color="text.secondary" variant="body1">
+          <Typography color="text.primary" variant="body1">
             {article.title}
           </Typography>
-          <Typography color="text.secondary" variant="body2" paddingTop={1}>
+          <Typography color="text.secondary" variant="subtitle2">
             {article.summary}
           </Typography>
-        </div>
-        <div>
-          <Typography color="text.secondary" variant="caption" paddingTop={2}>
+          <Typography
+            sx={{
+              color: '#ACACAC',
+            }}
+            variant="caption"
+            component="p"
+          >
             {toDisplayDate(article.createdAt)}
           </Typography>
         </div>
@@ -82,7 +89,8 @@ export const ArticleRow = ({ article, showPredictionVersion = false }: Props) =>
             <Chip
               key={v}
               sx={{
-                paddingX: 1,
+                height: '22px',
+                paddingX: 0.5,
                 marginRight: 1,
               }}
               label={v}
@@ -95,7 +103,8 @@ export const ArticleRow = ({ article, showPredictionVersion = false }: Props) =>
             <Chip
               key={v}
               sx={{
-                paddingX: 1,
+                height: '22px',
+                paddingX: 0.5,
                 marginRight: 1,
               }}
               label={v}
