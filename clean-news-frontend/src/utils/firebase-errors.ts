@@ -5,5 +5,5 @@ export function isFirebaseError(e: unknown): e is FirebaseError {
 }
 
 export function isCredentialError(e: FirebaseError): boolean {
-  return e.code === 'auth/invalid-email' || e.code === 'auth/invalid-credential'
+  return e.code === 'auth/invalid-email' || e.code === 'auth/invalid-login-credentials'
 }

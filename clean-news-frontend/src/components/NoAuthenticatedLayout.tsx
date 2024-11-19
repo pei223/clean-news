@@ -34,6 +34,7 @@ function NoAuthenticatedLayout({ children }: Props) {
           </Box>
         </Toolbar>
       </AppBar>
+      <Toolbar />
       <Container sx={{ paddingTop: 2 }}>{children}</Container>
     </>
   )
