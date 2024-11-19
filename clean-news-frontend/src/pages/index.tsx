@@ -50,6 +50,8 @@ export const IndexPage = () => {
     setSearchParams(newSearchParams)
     const filteredArticles = filterAndSortArticles(sourceArticles, criteria)
     setArticles(filteredArticles)
+    // searchParamsがないと怒られるがそれ自体を更新するので不要
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sourceArticles, criteria])
 
   useEffect(() => {
@@ -62,6 +64,8 @@ export const IndexPage = () => {
       filterCarefulLabels: userData.filterCarefulLabels,
       sortKind: userData.sortKind,
     })
+    // ユーザー状態取得できたらフィルタリングを更新するのみのためuserDataのみでいい
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData])
 
   const removeCachesAndRefetch = async () => {
