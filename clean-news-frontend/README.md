@@ -1,5 +1,6 @@
 # フィルタリングが強いニュースサイトのフロントエンド
 ## ツール
+- node.js/npm
 - gcloud CLI
 - sops
     - https://github.com/getsops/sops?tab=readme-ov-file#23encrypting-using-gcp-kms
