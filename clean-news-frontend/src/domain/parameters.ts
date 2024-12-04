@@ -39,7 +39,6 @@ export const Topics = [
 
 export const carefulLabels = [
   // 広告系
-  '広告',
   'ステマ',
   'センシティブ',
   'PR',

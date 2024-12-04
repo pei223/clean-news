@@ -41,7 +41,6 @@ QUALITY_LABELS = ["科学的根拠なし", ""]
 
 CAREFUL_LABELS = [
     # 広告系
-    "広告",
     "ステマ",
     "センシティブ",
     "PR",
