@@ -105,6 +105,14 @@ class Predictor:
                 config={"configurable": {"session_id": self._session_id}},
             )
 
+        if self._too_many_topics(topic_res):
+            # たまに大量にトピック選択された変な返答があるので1度だけやり直す
+            _logger.info("too many topics. retry", res=topic_res)
+            topic_res = self._topic_chain.invoke(
+                _topic_prediction_input,
+                config={"configurable": {"session_id": self._session_id}},
+            )
+
         _logger.debug("topics res", res=topic_res, article_title=article.title)
         return ArticleWithFeature(
             **asdict(article),
@@ -118,3 +126,7 @@ class Predictor:
             or "できません" in ".".join(res)
             or "出来ません" in ".".join(res)
         )
+
+    def _too_many_topics(self, res: list[str]) -> bool:
+        # 閾値は経験則
+        return len(res) > 20
