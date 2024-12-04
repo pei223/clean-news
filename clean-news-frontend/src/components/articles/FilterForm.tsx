@@ -4,6 +4,8 @@ import {
   AccordionSummary,
   Autocomplete,
   Checkbox,
+  Chip,
+  Divider,
   FormControl,
   Grid2,
   InputLabel,
@@ -28,7 +30,38 @@ type Props = {
   onCriteriaChange: (v: FilterAndSortCriteria) => void
 }
 
+const SelectAllLabel = '全て'
+
+const isSelectedAllCarefulLabels = (v: string[]) =>
+  v.filter((_v) => _v !== SelectAllLabel).length === carefulLabels.length
+
 export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
+  const handleSelectAllCarefulLabels = (newValue: string[]) => {
+    const isSelectAllBeforeUpdate = isSelectedAllCarefulLabels(criteria.filterCarefulLabels)
+    const removingSelectAll = isSelectAllBeforeUpdate && !newValue.includes(SelectAllLabel)
+    const addingSelectAll = !isSelectAllBeforeUpdate && newValue.includes(SelectAllLabel)
+
+    if (removingSelectAll) {
+      onCriteriaChange({
+        ...criteria,
+        filterCarefulLabels: [],
+      })
+      return
+    }
+    if (addingSelectAll) {
+      onCriteriaChange({
+        ...criteria,
+        filterCarefulLabels: carefulLabels,
+      })
+      return
+    }
+
+    onCriteriaChange({
+      ...criteria,
+      filterCarefulLabels: newValue.filter((v) => v !== SelectAllLabel),
+    })
+  }
+
   return (
     <div>
       <Accordion>
@@ -130,24 +163,31 @@ export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
             <Grid2 size={12}>
               <Autocomplete
                 multiple
-                options={carefulLabels}
-                value={criteria.filterCarefulLabels}
+                options={[SelectAllLabel].concat(carefulLabels)}
+                value={
+                  isSelectedAllCarefulLabels(criteria.filterCarefulLabels)
+                    ? carefulLabels.concat([SelectAllLabel])
+                    : criteria.filterCarefulLabels
+                }
                 disableCloseOnSelect
-                size="small"
                 onChange={(_, newValue: string[]) => {
-                  console.log(newValue)
-                  onCriteriaChange({
-                    ...criteria,
-                    filterCarefulLabels: newValue,
-                  })
+                  handleSelectAllCarefulLabels(newValue)
                 }}
+                renderTags={(values, getTagProps) =>
+                  values
+                    .filter((v) => v !== SelectAllLabel)
+                    .map((v, i) => <Chip size="small" {...getTagProps({ index: i })} label={v} />)
+                }
                 renderOption={(props, option, { selected }) => {
                   const { key, ...optionProps } = props
                   return (
-                    <li key={key as string} {...optionProps}>
-                      <Checkbox checked={selected} />
-                      {option}
-                    </li>
+                    <>
+                      <li key={key as string} {...optionProps}>
+                        <Checkbox checked={selected} />
+                        {option}
+                      </li>
+                      {option === SelectAllLabel && <Divider />}
+                    </>
                   )
                 }}
                 renderInput={(params) => (
