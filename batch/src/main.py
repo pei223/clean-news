@@ -14,6 +14,7 @@ config = Config.load()
 init_logger(config.log_level)
 logger = get_logger()
 
+logger.info("start batch", start_date=datetime.now())
 
 scraper = LivedoorNewsScraper()
 predictor = Predictor(config.open_api_key, config.article_max_char_len_for_predict)
@@ -60,3 +61,5 @@ old_created_at = datetime.now(timezone.utc) - timedelta(
 logger.info("clean old job", old_created_at=old_created_at)
 repo.delete_old_by_created_at(old_created_at)
 logger.info("clean old job finished", old_created_at=old_created_at)
+
+logger.info("finished batch", end_date=datetime.now())
