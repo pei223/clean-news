@@ -9,7 +9,7 @@ from langchain_core.output_parsers import (
     StrOutputParser,
 )
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from structlog import get_logger
 
 from app.domain.articles import Article, ArticleWithFeature
@@ -40,10 +40,10 @@ _topic_prediction_input = """
 
 class Predictor:
     def __init__(
-        self, open_ai_api_key: str, article_max_char_len_for_predict: int
+        self, gemini_api_key: str, article_max_char_len_for_predict: int
     ) -> None:
-        os.environ["OPEN_API_KEY"] = open_ai_api_key
-        model = ChatOpenAI(model="gpt-4o-mini")
+        os.environ["GOOGLE_API_KEY"] = gemini_api_key
+        model = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
         self._session_id = str(random.randint(0, 1000000))
         self._history = SaveSwitchableChatMessageHistory()
         self._memorize_chain = RunnableWithMessageHistory(
@@ -95,7 +95,7 @@ class Predictor:
 
     def _is_topics_empty(self, res: list[str]) -> bool:
         return len(res) == 0
-    
+
     def _too_many_topics(self, res: list[str]) -> bool:
         # 閾値は経験則
         return len(res) > 20

@@ -9,7 +9,7 @@ config = Config.load()
 
 
 scraper = LivedoorNewsScraper()
-predictor = Predictor(config.open_api_key, config.article_max_char_len_for_predict)
+predictor = Predictor(config.google_api_key, config.article_max_char_len_for_predict)
 
 articles = scraper.get_article_summaries(
     datetime.now() - timedelta(hours=4, minutes=30)

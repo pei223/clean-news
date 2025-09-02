@@ -5,7 +5,7 @@ from typing import Any, Literal, Optional
 
 @dataclass
 class Config:
-    open_api_key: str
+    google_api_key: str
     firebase_admin_sdk_credential_file_path: str
     article_max_char_len_for_predict: int
     clean_up_threshold_days: int
@@ -22,7 +22,7 @@ class Config:
     @staticmethod
     def load() -> "Config":
         return Config(
-            open_api_key=_get_env_variable("OPENAI_API_KEY"),
+            google_api_key=_get_env_variable("GOOGLE_API_KEY"),
             firebase_admin_sdk_credential_file_path=_get_env_variable(
                 "FIREBASE_ADMIN_SDK_CREDENTIAL_FILE_PATH"
             ),

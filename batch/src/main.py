@@ -17,7 +17,7 @@ logger = get_logger()
 logger.info("start batch", start_date=datetime.now())
 
 scraper = LivedoorNewsScraper()
-predictor = Predictor(config.open_api_key, config.article_max_char_len_for_predict)
+predictor = Predictor(config.google_api_key, config.article_max_char_len_for_predict)
 repo = FirestoreArticleRepo(config.firebase_admin_sdk_credential_file_path)
 
 # 推論時間も含めて30分古いものを含める
@@ -48,8 +48,10 @@ for i, article_summary in enumerate(article_summaries):
         topics=article_with_feature.topics,
         careful_labels=article_with_feature.careful_labels,
     )
-    repo.save(article_with_feature, "20250320-1")
-    time.sleep(0.5)
+    repo.save(article_with_feature, "20250902-1")
+    # gemini flashはRPM 10のため
+    # https://ai.google.dev/gemini-api/docs/rate-limits?hl=ja
+    time.sleep(6)
 logger.info("save finished", limit_min_date=limit_min_date)
 
 
