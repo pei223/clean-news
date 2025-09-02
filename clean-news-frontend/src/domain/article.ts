@@ -26,6 +26,7 @@ export interface ArticleWithDisplayDisable extends Article {
 export interface FilterAndSortCriteria {
   filterTopics: string[]
   filterCarefulLabels: string[]
+  freeKeywords: string[]
   sortKind: SortKinds
   blockedArticleVisibility: BlockedArticleVisibility
 }
@@ -41,10 +42,21 @@ export function filterAndSortArticles(
     intersection(row.topics, criteria.filterTopics).length > 0
   const blockedByCarefulLabels = (row: Article) =>
     intersection(row.carefulLabels, criteria.filterCarefulLabels).length > 0
+  const blockedByFreeKeywords = (row: Article) =>
+    criteria.freeKeywords.find(
+      (kw) =>
+        row.summary.includes(kw) ||
+        row.title.includes(kw) ||
+        new RegExp(kw).test(row.title) ||
+        new RegExp(kw).test(row.body),
+    ) != null
 
   if (criteria.blockedArticleVisibility === 'remove') {
     v = articles
-      .filter((row) => !blockedByTopics(row) && !blockedByCarefulLabels(row))
+      .filter(
+        (row) =>
+          !blockedByTopics(row) && !blockedByCarefulLabels(row) && !blockedByFreeKeywords(row),
+      )
       .map((v) => ({
         ...v,
         displayDisabled: false,
@@ -52,7 +64,8 @@ export function filterAndSortArticles(
   } else {
     v = articles.map((row) => ({
       ...row,
-      displayDisabled: blockedByTopics(row) || blockedByCarefulLabels(row),
+      displayDisabled:
+        blockedByTopics(row) || blockedByCarefulLabels(row) || blockedByFreeKeywords(row),
     }))
   }
 

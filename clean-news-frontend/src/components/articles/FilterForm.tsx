@@ -133,6 +133,27 @@ export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
             </Grid2>
             <Grid2 size={12}>
               <Autocomplete
+                options={[]}
+                freeSolo
+                multiple
+                size="small"
+                renderTags={(value, props) =>
+                  value.map((option, index) => (
+                    <Chip size="small" label={option} {...props({ index })} />
+                  ))
+                }
+                renderInput={(params) => <TextField label="ブロックするキーワード" {...params} />}
+                value={criteria.freeKeywords}
+                onChange={(_, newValue: string[]) => {
+                  onCriteriaChange({
+                    ...criteria,
+                    freeKeywords: newValue,
+                  })
+                }}
+              />
+            </Grid2>
+            <Grid2 size={12}>
+              <Autocomplete
                 multiple
                 options={Topics}
                 value={criteria.filterTopics}
@@ -177,7 +198,9 @@ export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
                 renderTags={(values, getTagProps) =>
                   values
                     .filter((v) => v !== SelectAllLabel)
-                    .map((v, i) => <Chip size="small" {...getTagProps({ index: i })} label={v} />)
+                    .map((v, i) => (
+                      <Chip size="small" {...getTagProps({ index: i })} key={v} label={v} />
+                    ))
                 }
                 renderOption={(props, option, { selected }) => {
                   const { key, ...optionProps } = props

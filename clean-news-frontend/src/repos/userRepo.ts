@@ -17,7 +17,7 @@ export type UserFirestoreData = {
   filter_careful_labels: string[]
   blocked_article_visibility: BlockedArticleVisibility
   sort_kind: SortKinds
-  free_keywords: string[]
+  free_keywords?: string[]
   updated_at: Timestamp
 }
 
@@ -41,7 +41,7 @@ export class UserRepo {
       filterCarefulLabels: data.filter_careful_labels,
       blockedArticleVisibility: data.blocked_article_visibility,
       sortKind: data.sort_kind,
-      freeKeywords: data.free_keywords,
+      freeKeywords: data.free_keywords || [],
       updatedAt: data.updated_at,
     }
   }

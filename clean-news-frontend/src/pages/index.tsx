@@ -63,6 +63,7 @@ export const IndexPage = () => {
       blockedArticleVisibility: userData.blockedArticleVisibility,
       filterTopics: userData.filterTopics,
       filterCarefulLabels: userData.filterCarefulLabels,
+      freeKeywords: userData.freeKeywords || [],
       sortKind: userData.sortKind,
     })
     // ユーザー状態取得できたらフィルタリングを更新するのみのためuserDataのみでいい
@@ -81,8 +82,6 @@ export const IndexPage = () => {
     try {
       await updateUserData(user!.uid, {
         ...criteria,
-        // TODO 未実装なので空配列を入れておく
-        freeKeywords: [],
       })
       // 永続化 & キャッシュ保存しており、stateも更新できているので
       // わざわざmutateする必要はない.

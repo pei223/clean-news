@@ -22,8 +22,15 @@ const getUserFromCache = (): UserData | null => {
   if (cache == null) {
     return null
   }
-  const cacheRecord = JSON.parse(cache, parseConsideringDate) as UserData
-  return cacheRecord
+  const cacheRecord = JSON.parse(cache, parseConsideringDate) as
+    | UserData
+    | {
+        freeKeywords?: string[]
+      }
+  return {
+    ...cacheRecord,
+    freeKeywords: cacheRecord.freeKeywords || [],
+  } as UserData
 }
 
 const userFetcher = async ([userId]: [string]): Promise<UserData> => {
