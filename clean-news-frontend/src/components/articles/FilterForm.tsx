@@ -24,6 +24,7 @@ import {
 import { blockedArticleVisibilityLabel, sortKindLabel } from './types'
 import { Topics, carefulLabels } from '../../domain/parameters'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { logger } from '../../utils/logger'
 
 type Props = {
   criteria: FilterAndSortCriteria
@@ -138,7 +139,7 @@ export const FilterForm = ({ criteria, onCriteriaChange }: Props) => {
                 disableCloseOnSelect
                 size="small"
                 onChange={(_, newValue: string[]) => {
-                  console.log(newValue)
+                  logger.log(newValue)
                   onCriteriaChange({
                     ...criteria,
                     filterTopics: newValue,

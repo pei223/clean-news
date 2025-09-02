@@ -4,6 +4,7 @@ import { ArticleRepo } from '../repos/articleRepo'
 import { ApiHookResult } from './swr-helper/types'
 import dayjs from 'dayjs'
 import { CacheRecord, parseConsideringDate, stringifyConsideringDate } from './swr-helper/cache'
+import { logger } from '../utils/logger'
 
 const articlesCacheKey = 'articles'
 
@@ -38,12 +39,12 @@ const getArticlesFromCache = (): Article[] | null => {
 const articlesFetcher = async (): Promise<Article[]> => {
   const cacheValue = getArticlesFromCache()
   if (cacheValue == null) {
-    console.log('fetch articles from external')
+    logger.log('fetch articles from external')
     const v = await new ArticleRepo().fetchArticles()
     setArticlesToCache(v, dayjs().add(REFETCH_HOURS, 'hour').toDate())
     return v
   }
-  console.log('fetch articles from cache')
+  logger.log('fetch articles from cache')
   return cacheValue
 }
 

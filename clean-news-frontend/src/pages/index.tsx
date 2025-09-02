@@ -17,6 +17,7 @@ import { useSearchParams } from 'react-router-dom'
 import { removeUserCache, updateUserData, useUserData } from '../stores/user'
 import { useSnackbar } from 'notistack'
 import { DefaultUserData } from '../domain/user'
+import { logger } from '../utils/logger'
 
 export const IndexPage = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -86,7 +87,7 @@ export const IndexPage = () => {
       // 永続化 & キャッシュ保存しており、stateも更新できているので
       // わざわざmutateする必要はない.
     } catch (e) {
-      console.error(e)
+      logger.error(e)
       enqueueSnackbar({
         message: 'フィルタリング設定の更新に失敗しました',
         variant: 'error',

@@ -3,11 +3,12 @@ import { ApiHookResult } from './swr-helper/types'
 import { parseConsideringDate, stringifyConsideringDate } from './swr-helper/cache'
 import { DefaultUserData, UserData } from '../domain/user'
 import { UpdateUserDataArgs, UserRepo } from '../repos/userRepo'
+import { logger } from '../utils/logger'
 
 const userCacheKey = 'userData'
 
 const setUserToCache = (v: UserData) => {
-  console.log('save user cache', v)
+  logger.log('save user cache', v)
   const vStr = JSON.stringify(v, stringifyConsideringDate)
   localStorage.setItem(userCacheKey, vStr)
 }
@@ -29,16 +30,16 @@ const userFetcher = async ([userId]: [string]): Promise<UserData> => {
   const cacheValue = getUserFromCache()
   if (cacheValue == null) {
     const v = await new UserRepo().fetchUserData(userId)
-    console.log('fetch user from external', v)
+    logger.log('fetch user from external', v)
     if (v == null) {
-      console.log('external user data is null')
+      logger.log('external user data is null')
       setUserToCache(DefaultUserData)
       return DefaultUserData
     }
     setUserToCache(v)
     return v
   }
-  console.log('fetch user from cache', cacheValue)
+  logger.log('fetch user from cache', cacheValue)
   return cacheValue
 }
 

@@ -1,4 +1,5 @@
 import { Cache } from 'swr'
+import { logger } from '../../utils/logger'
 
 const timestampExp = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
 
@@ -15,7 +16,7 @@ export function localStorageProvider(): Cache {
 
   // アプリが終了する前に、すべてのデータを `localStorage` に保存します。
   window.addEventListener('beforeunload', () => {
-    console.log('save cache')
+    logger.log('save cache')
     const appCache = JSON.stringify(Array.from(map.entries()), (_, v) => {
       if (v != null && typeof v.toISOString === 'function') {
         return v.toISOString()

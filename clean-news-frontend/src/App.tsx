@@ -13,6 +13,7 @@ import RequireAuth from './components/common/RequireAuth'
 import { AppContext } from './stores/appContext'
 import { useAuthEffect } from './hooks/common/auth'
 import LoadingScreen from './components/common/LoadingScreen'
+import { logger } from './utils/logger'
 
 const theme = createTheme({
   spacing: 8,
@@ -54,7 +55,7 @@ function App() {
       <SWRConfig
         value={{
           onError: (error) => {
-            console.error(error)
+            logger.error(error)
           },
         }}
       >

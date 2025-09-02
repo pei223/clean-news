@@ -1,6 +1,7 @@
 import { User } from 'firebase/auth'
 import { auth } from '../../firebase'
 import { useEffect } from 'react'
+import { logger } from '../../utils/logger'
 
 interface Args {
   setUser: (user: User | null) => void
@@ -10,7 +11,7 @@ interface Args {
 export const useAuthEffect = ({ setUser, setUserInitialized }: Args) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      console.log(user)
+      logger.log(user)
       setUserInitialized(true)
       if (!user) {
         setUser(null)

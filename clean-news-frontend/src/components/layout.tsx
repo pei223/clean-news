@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase'
 import { AppContext } from '../stores/appContext'
+import { logger } from '../utils/logger'
 
 interface menu {
   icon?: () => React.ReactNode
@@ -34,7 +35,7 @@ function Layout({ children }: Props) {
 
   // この辺は開発者モード切り替え用の処理
   const onClickAppBar = () => {
-    console.log(appBarClickCount + 1)
+    logger.log(appBarClickCount + 1)
     if (appBarClickCount + 1 > 5) {
       setDevelopperMode(true)
     }
@@ -42,7 +43,7 @@ function Layout({ children }: Props) {
   }
   useEffect(() => {
     const id = setInterval(() => {
-      console.log(0)
+      logger.log(0)
       setAppBarClickCount(0)
     }, 3000)
     return () => clearInterval(id)
